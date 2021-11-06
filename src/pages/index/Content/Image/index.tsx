@@ -1,9 +1,17 @@
+import { CImage } from '@coreui/react';
 import React from 'react';
 import {Container} from './styles';
+import { useImages } from '../../../../hooks/images';
 
 const Image: React.FC = () => {
 
-  return (<Container></Container>);
+  const {selectedImage} = useImages();
+
+  return (
+    <Container>
+      <CImage fluid src={selectedImage.base64Image} />
+    </Container>
+  );
 }
 
 export default Image;

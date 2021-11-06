@@ -1,30 +1,37 @@
 import React from 'react';
-import { CNavGroup, CNavItem, CNavTitle, CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPalette } from '@fortawesome/free-solid-svg-icons';
+import { CNavGroup, CNavItem, CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react';
+import ConversaoDeCor from './conversaoDeCor';
+import {Brand} from './styles';
+import AddImage from './addImage';
+
 
 const SideBar: React.FC = () => {
-
+  
   return (
     <CSidebar className="h-100">
-      <CSidebarBrand>Sidebar Brand</CSidebarBrand>
+      <CSidebarBrand><Brand>Projeto gráfico</Brand></CSidebarBrand>
       <CSidebarNav>
-        <CNavTitle>Nav Title</CNavTitle>
+
+        <AddImage />
+
+        <ConversaoDeCor />
+
         <CNavItem href="#">
-        <FontAwesomeIcon icon={faPalette} />
-          Nav item
+          Filtro
         </CNavItem>
+
         <CNavItem href="#">
-          With badge
+          Detector de borda
         </CNavItem>
-        <CNavGroup toggler="asdasd">
-          <CNavItem href="#">
-            Nav dropdown item
-          </CNavItem>
-          <CNavItem href="#">
-            Nav dropdown item
-          </CNavItem>
-        </CNavGroup>
+
+        <CNavItem href="#">
+          Binarização
+        </CNavItem>
+
+        <CNavItem href="#">
+          Morfologia matemática
+        </CNavItem>
+      
       </CSidebarNav>
       <CSidebarToggler />
     </CSidebar>
