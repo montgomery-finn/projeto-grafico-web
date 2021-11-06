@@ -1,6 +1,4 @@
 import React, {createContext, useCallback, useContext, useState} from 'react';
-import DefaultImage from './defaultImage';
-import {v4} from 'uuid';
 
 interface Image {
   id: string;
@@ -9,7 +7,7 @@ interface Image {
 }
 
 interface ImagesContextData {
-  selectedImage: Image;
+  selectedImage: Image | null;
   setSelectedImage: (image: Image) => void;
   allImages: Image[];
   addImage: (image: Image) => void;
@@ -18,27 +16,32 @@ interface ImagesContextData {
 
 const ImagesContext = createContext<ImagesContextData>({} as ImagesContextData);
 
-const defaultImage = {id: v4(), base64Image: DefaultImage, name: "Original"}
-
 const ImagesProvider: React.FC = ({children}) => {
 
-  const [selectedImage, setSelectedImage] = useState<Image>(defaultImage);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
-  const [allImages, setAllImages] = useState([defaultImage]);
+  const [allImages, setAllImages] = useState<Array<Image>>([]);
 
   const addImage = useCallback((image: Image) => {
     setAllImages((oldValue) => [...oldValue, image]);
-  }, [setAllImages]);
+
+    if(selectedImage == null){
+      setSelectedImage(image);
+    }
+  }, [selectedImage]);
 
   const removeImage = useCallback((image: Image) => {
     setAllImages((oldValue) => {
-      const indexToRemove = oldValue.findIndex((value) => value === image);
+      if(image.id === selectedImage?.id){
+        setSelectedImage(null);
+      }
 
+      const indexToRemove = oldValue.findIndex((value) => value.id === image.id);
       const newArray = oldValue.splice(indexToRemove, 1);
 
       return newArray;
     });
-  }, []);
+  }, [selectedImage]);
 
   return (
     <ImagesContext.Provider

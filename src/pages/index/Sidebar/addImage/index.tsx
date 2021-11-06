@@ -16,7 +16,7 @@ const AddImage: React.FC = () => {
     reader.onload = function () {
       addImage({
         id: v4(),
-        name: "Original",
+        name: file.name,
         base64Image: (reader.result as string)
       });
       console.log(reader.result)
