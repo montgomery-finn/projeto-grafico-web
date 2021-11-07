@@ -1,13 +1,17 @@
 import { CNavItem, CNavGroup } from '@coreui/react';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ToggleButton, Button } from 'react-bootstrap';
 import { Container, FormContainer, CheckboxContainer } from './styles';
+import { useImages } from '../../../../hooks/images';
+import { v4 } from 'uuid';
 
 const ConversaoDeCor: React.FC = () => {
 
-  const [radioValue, setRadioValue] = useState('1');
+  const [radioValue, setRadioValue] = useState('RGB');
+
+  const { selectedImage, addImage, setSelectedImage } = useImages();
 
   const radios = useMemo(() => [
     { name: 'RGB', value: 'RGB' },
@@ -26,6 +30,36 @@ const ConversaoDeCor: React.FC = () => {
       <span style={{marginLeft: 14}}>Conversão de cor</span>
     </div>
   ), []);
+
+  const handleSubmit = useCallback(() => {
+  
+
+    fetch("https://localhost:44327/Conversion", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({base64Image: selectedImage?.base64Image ?? "", colorModel: radioValue}),
+      method: "POST"
+    }) 
+    .then(res => res.json())
+    .then(
+      (result) => {
+        const image = {
+          id: v4(),
+          name: (selectedImage?.name ?? "") + radioValue,
+          base64Image: "data:image/jpeg;base64," + result
+        }
+
+        addImage(image);
+
+        setSelectedImage(image);
+      },
+      (error) => {
+        console.log("Erro => ", error);
+      }
+    )
+  }, [addImage, radioValue, selectedImage?.base64Image, selectedImage?.name, setSelectedImage]);
 
   const form = useMemo(() => (
     <FormContainer>
@@ -46,9 +80,9 @@ const ConversaoDeCor: React.FC = () => {
           </ToggleButton>
         ))}
     </CheckboxContainer>
-    <Button variant="success">Converter</Button>
+    <Button variant="success" onClick={handleSubmit}>Converter</Button>
   </FormContainer>
-  ), [radioValue, radios]);
+  ), [handleSubmit, radioValue, radios]);
 
   return (
     <Container>
