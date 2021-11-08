@@ -25,21 +25,16 @@ const ImagesProvider: React.FC = ({children}) => {
   const addImage = useCallback((image: Image) => {
     setAllImages((oldValue) => [...oldValue, image]);
 
-    if(selectedImage == null){
-      setSelectedImage(image);
-    }
-  }, [selectedImage]);
+    setSelectedImage(image);
+  }, []);
 
   const removeImage = useCallback((image: Image) => {
     setAllImages((oldValue) => {
-      if(image.id === selectedImage?.id){
+      if(selectedImage && selectedImage.id === image.id){
         setSelectedImage(null);
       }
 
-      const indexToRemove = oldValue.findIndex((value) => value.id === image.id);
-      const newArray = oldValue.splice(indexToRemove, 1);
-
-      return newArray;
+      return oldValue.filter(i => i.id !== image.id);
     });
   }, [selectedImage]);
 

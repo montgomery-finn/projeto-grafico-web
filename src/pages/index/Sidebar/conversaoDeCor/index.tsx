@@ -32,8 +32,6 @@ const ConversaoDeCor: React.FC = () => {
   ), []);
 
   const handleSubmit = useCallback(() => {
-  
-
     fetch("https://localhost:44327/Conversion", {
       headers: {
         'Accept': 'application/json',
@@ -48,7 +46,7 @@ const ConversaoDeCor: React.FC = () => {
         const image = {
           id: v4(),
           name: (selectedImage?.name ?? "") + radioValue,
-          base64Image: "data:image/jpeg;base64," + result
+          base64Image: result
         }
 
         addImage(image);
