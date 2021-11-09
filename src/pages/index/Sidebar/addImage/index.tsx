@@ -2,29 +2,39 @@ import React, { useRef, useCallback } from 'react';
 import {Button} from 'react-bootstrap';
 import { useImages } from '../../../../hooks/images';
 import { v4 } from 'uuid';
+import { useToast } from '../../../../hooks/toast';
 
 const AddImage: React.FC = () => {
   const { addImage } = useImages();
 
+  const {addToast} = useToast();
+
   const inputRef = useRef(null);
 
   const handleInputValueChange = useCallback(() => {
-    const file = (inputRef.current as any).files[0];
+    try{
+      const file = (inputRef.current as any).files[0];
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      addImage({
-        id: v4(),
-        name: file.name,
-        base64Image: (reader.result as string)
-      });
-      console.log(reader.result)
-    };
-    reader.onerror = function (error) {
-        console.log('Error: ', error);
-    };
-  }, [addImage]);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        addImage({
+          id: v4(),
+          name: file.name,
+          base64Image: (reader.result as string)
+        });
+        console.log(reader.result)
+      };
+      reader.onerror = function (error) {
+          console.log("aaa")
+          addToast({type: 'danger', title: "Erro", description: "Ocorreu um erro ao selecionar imagem"});
+      };
+    } catch {
+      console.log("aaa")
+      addToast({type: 'danger', title: "Erro", description: "Ocorreu um erro ao selecionar imagem"});
+    }
+    
+  }, [addImage, addToast]);
 
   return (
     <Button className="m-2" variant="success" onClick={() => (inputRef.current as any).click()}>

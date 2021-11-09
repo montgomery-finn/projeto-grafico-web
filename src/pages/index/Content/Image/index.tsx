@@ -1,9 +1,8 @@
-import { CImage } from '@coreui/react';
 import React from 'react';
 import {Container} from './styles';
 import { useImages } from '../../../../hooks/images';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage } from '@fortawesome/free-solid-svg-icons';
+import { Image as BootstrapImage } from 'react-bootstrap';
+import {FaImage} from 'react-icons/fa';
 
 const Image: React.FC = () => {
 
@@ -12,8 +11,8 @@ const Image: React.FC = () => {
   return (
     <Container>
       {selectedImage ? 
-        <CImage fluid src={selectedImage.base64Image} /> :
-        <FontAwesomeIcon icon={faImage} size="10x"/>
+        <BootstrapImage fluid src={selectedImage.base64Image} /> :
+        <FaImage size={320}/>
       }
       
     </Container>

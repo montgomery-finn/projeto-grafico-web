@@ -23,20 +23,18 @@ const ImagesProvider: React.FC = ({children}) => {
   const [allImages, setAllImages] = useState<Array<Image>>([]);
 
   const addImage = useCallback((image: Image) => {
-    setAllImages((oldValue) => [...oldValue, image]);
-
     setSelectedImage(image);
+
+    setAllImages((oldValue) => [...oldValue, image]);
   }, []);
 
   const removeImage = useCallback((image: Image) => {
     setAllImages((oldValue) => {
-      if(selectedImage && selectedImage.id === image.id){
-        setSelectedImage(null);
-      }
-
+      setSelectedImage(null);
+      
       return oldValue.filter(i => i.id !== image.id);
     });
-  }, [selectedImage]);
+  }, []);
 
   return (
     <ImagesContext.Provider

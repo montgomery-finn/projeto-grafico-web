@@ -1,40 +1,39 @@
-import { CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from '@coreui/react';
 import React from 'react';
 import {Container} from './styles';
 import { useImages } from '../../../../hooks/images';
-import { Button } from 'react-bootstrap';
-import {faTrashAlt} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Table } from 'react-bootstrap';
+import {FaTrashAlt} from 'react-icons/fa';
 
 const List: React.FC = () => {
 
-  const {allImages, removeImage, setSelectedImage} = useImages();
+  const {allImages, removeImage, setSelectedImage, selectedImage} = useImages();
 
   return (
     <Container>
-      <CTable striped hover align="middle" responsive>
-      <CTableHead>
-        <CTableRow>
-          <CTableHeaderCell scope="col" className="w-30">#</CTableHeaderCell>
-          <CTableHeaderCell scope="col" className="w-30">Nome</CTableHeaderCell>
-        </CTableRow>
-      </CTableHead>
-  
-        <CTableBody>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
           {allImages.map((image, index) => (
-            <CTableRow key={image.id} onClick={() => setSelectedImage(image)}>
-              <CTableHeaderCell scope="row">{index+1}</CTableHeaderCell>
-              <CTableDataCell>{image.name}</CTableDataCell>
-              <CTableDataCell>
-                <Button variant="danger" onClick={() => {removeImage(image)}}>
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </Button>
-              </CTableDataCell>
-            </CTableRow>
-          ))}
-        </CTableBody>
+              <tr key={image.id} onClick={() => setSelectedImage(image)}
+                className={image.id === selectedImage?.id ? "bg-info" : ""}>
+                <td >{index+1}</td>
+                <td>{image.name}</td>
+                <td>
+                  <Button variant="danger" onClick={() => {removeImage(image)}}>
+                    <FaTrashAlt />
+                  </Button>
+                </td>
+              </tr>
+            ))}
 
-      </CTable>
+        </tbody>
+      </Table>
     </Container>
   );
 }

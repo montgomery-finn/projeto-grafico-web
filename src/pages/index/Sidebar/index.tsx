@@ -1,40 +1,35 @@
 import React from 'react';
-import { CNavGroup, CNavItem, CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react';
-import ConversaoDeCor from './conversaoDeCor';
 import {Brand} from './styles';
 import AddImage from './addImage';
-
+import ColorConversion from './colorConversion';
+import BilateralFilter from './bilateralFilter';
+import { ProSidebar, Menu, MenuItem, SidebarHeader } from 'react-pro-sidebar';
+import 'react-pro-sidebar/dist/css/styles.css';
+import CannyBorder from './cannyBorder';
+import Binarization from './binarization';
+import Morphology from './morphology';
 
 const SideBar: React.FC = () => {
   
   return (
-    <CSidebar className="h-100">
-      <CSidebarBrand><Brand>Projeto gráfico</Brand></CSidebarBrand>
-      <CSidebarNav>
-
+    <ProSidebar>
+      <SidebarHeader>
+        <Brand>Projeto gráfico</Brand>
+      </SidebarHeader>
+      <Menu iconShape="round">  
         <AddImage />
+        
+        <ColorConversion />
+        
+        <BilateralFilter />
 
-        <ConversaoDeCor />
+        <CannyBorder />
+        
+        <Binarization />
 
-        <CNavItem href="#">
-          Filtro
-        </CNavItem>
-
-        <CNavItem href="#">
-          Detector de borda
-        </CNavItem>
-
-        <CNavItem href="#">
-          Binarização
-        </CNavItem>
-
-        <CNavItem href="#">
-          Morfologia matemática
-        </CNavItem>
-      
-      </CSidebarNav>
-      <CSidebarToggler />
-    </CSidebar>
+        <Morphology />
+      </Menu>
+    </ProSidebar>
     );
 }
 

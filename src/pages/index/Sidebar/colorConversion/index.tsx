@@ -1,17 +1,17 @@
-import { CNavItem, CNavGroup } from '@coreui/react';
-import { faPalette } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ToggleButton, Button } from 'react-bootstrap';
 import { Container, FormContainer, CheckboxContainer } from './styles';
 import { useImages } from '../../../../hooks/images';
 import { v4 } from 'uuid';
+import { useToast } from '../../../../hooks/toast';
+import { FaPalette } from 'react-icons/fa';
+import { SubMenu } from 'react-pro-sidebar';
 
 const ConversaoDeCor: React.FC = () => {
 
   const [radioValue, setRadioValue] = useState('RGB');
 
-  const { selectedImage, addImage, setSelectedImage } = useImages();
+  const { selectedImage, addImage } = useImages();
 
   const radios = useMemo(() => [
     { name: 'RGB', value: 'RGB' },
@@ -24,12 +24,8 @@ const ConversaoDeCor: React.FC = () => {
   ], []);
 
 
-  const toggler = useMemo(() => (
-    <div>
-      <FontAwesomeIcon icon={faPalette} />
-      <span style={{marginLeft: 14}}>Conversão de cor</span>
-    </div>
-  ), []);
+
+  const {addToast} = useToast();
 
   const handleSubmit = useCallback(() => {
     fetch("https://localhost:44327/Conversion", {
@@ -45,19 +41,17 @@ const ConversaoDeCor: React.FC = () => {
       (result) => {
         const image = {
           id: v4(),
-          name: (selectedImage?.name ?? "") + radioValue,
+          name: (selectedImage?.name ?? "") + " - " + radioValue,
           base64Image: result
         }
 
         addImage(image);
-
-        setSelectedImage(image);
       },
       (error) => {
-        console.log("Erro => ", error);
+        addToast({type: 'danger', title: "Erro", description: "Ocorreu um erro ao converter a imagem"});
       }
     )
-  }, [addImage, radioValue, selectedImage?.base64Image, selectedImage?.name, setSelectedImage]);
+  }, [addImage, addToast, radioValue, selectedImage?.base64Image, selectedImage?.name]);
 
   const form = useMemo(() => (
     <FormContainer>
@@ -83,12 +77,10 @@ const ConversaoDeCor: React.FC = () => {
   ), [handleSubmit, radioValue, radios]);
 
   return (
-    <Container>
-        <CNavGroup toggler={toggler}>
-          <CNavItem href="#">
-            {form}
-          </CNavItem>
-        </CNavGroup>
+    <Container>  
+      <SubMenu title="Conversão de cor" icon={<FaPalette />}>
+        {form}
+      </SubMenu>
     </Container>
   );
 };
