@@ -9,26 +9,32 @@ const AddImage: React.FC = () => {
 
   const {addToast} = useToast();
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputValueChange = useCallback(() => {
+    console.log("chegou aqui")
     try{
-      const file = (inputRef.current as any).files[0];
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-        addImage({
-          id: v4(),
-          name: file.name,
-          base64Image: (reader.result as string)
-        });
-        console.log(reader.result)
-      };
-      reader.onerror = function (error) {
-          console.log("aaa")
-          addToast({type: 'danger', title: "Erro", description: "Ocorreu um erro ao selecionar imagem"});
-      };
+      if(inputRef.current && inputRef.current.files){
+        const file = inputRef.current.files[0];
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          addImage({
+            id: v4(),
+            name: file.name,
+            base64Image: (reader.result as string)
+          });
+          console.log(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log("aaa")
+            addToast({type: 'danger', title: "Erro", description: "Ocorreu um erro ao selecionar imagem"});
+        };
+
+        inputRef.current.value = "";
+      }
     } catch {
       console.log("aaa")
       addToast({type: 'danger', title: "Erro", description: "Ocorreu um erro ao selecionar imagem"});

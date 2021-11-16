@@ -32,6 +32,7 @@ const Morphology: React.FC = () => {
     .then(res => res.json())
     .then(
       (result) => {
+        console.log('aaa')
         const image = {
           id: v4(),
           name: (selectedImage?.name ?? "") + " - " + (radioValue === "0" ? "Open" : "Close"),
